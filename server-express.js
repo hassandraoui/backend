@@ -12,6 +12,7 @@ mongoose.connect(`${process.env.MONGO_URI}/cpi_db`,
 )
 
 const app = express()
+
 app.use(express.json())
 
 app.get("/", (req,res) => {
