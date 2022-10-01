@@ -16,7 +16,7 @@ const app = express()
 app.use(express.json())
 
 app.get("/", (req,res) => {
-res.send("Liste des groupes")
+res.send("Liste des groupes de l'ISGI")
 })
 
 app.use("/auth", routesAuth)
