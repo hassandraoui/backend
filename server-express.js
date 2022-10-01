@@ -1,7 +1,7 @@
 const express = require("express")
 require("dotenv").config()
 const routesStagiaire = require("./routes/routesStagiaire")
-const routesUser = require("./routes/routesUser")
+const routesUser =  require("./routes/routesUser")
 const routesAuth = require("./routes/routesAuth")
 const {authByToken,authByRole} = require("./middlewares/authMiddlewares")
 
