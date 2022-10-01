@@ -3,7 +3,7 @@ require("dotenv").config()
 const routesStagiaire = require("./routes/routesStagiaire")
 const routesUser =  require("./routes/routesUser")
 const routesAuth = require("./routes/routesAuth")
-const {authByToken,authByRole} = require("./middlewares/authMiddlewares")
+const {authByToken, authByRole} = require("./middlewares/authMiddlewares")
 
 const mongoose = require("mongoose")
 mongoose.connect(`${process.env.MONGO_URI}/cpi_db`, 
