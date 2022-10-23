@@ -9,29 +9,7 @@ function generateAccessToken (user)  {
 function generateRefreshToken (user)  {
 	return refreshToken = jwt.sign( user , process.env.REFRESH_TOKEN,{expiresIn:"1w"} )
 }
-async function createUser(req,res){
-    if(!req.body.user) {
-        return res.status(401).json({message:"pas de données envoyées"})
-    }
-    try {
-        const passCrypt = await bcrypt.hash(req.body.user.password,10)
-        const user1 = new User({
-            nom: req.body.user.nom,
-            prenom: req.body.user.prenom,
-            matricule: req.body.user.matricule,
-            email: req.body.user.email,
-            role:req.body.user.role || 'USER',
-            password:passCrypt
-        })
-        user1.save().then( (user1)=> {
-            return res.status(201).json({message:"Utilisateur ajouté!"})
-            }).catch((err)=>{
-                console.log("Probleme de sauvegarde : "+err)
-        })
-    } catch (err) {
-        console.log(err.message)
-    }
-}
+
 async function researchUserByMatricule(mat)  {
     try {
         return await User.findOne({matricule:mat}) 
@@ -43,18 +21,18 @@ async function verifyPassword(bdPass,sentPass){
     return await bcrypt.compare(bdPass,sentPass)
 }
 async function loginUser (req,res){
-    if(!req.body.user) {
+    if(!req.body) {
         return res.status(401).json({message:"pas de données envoyées"})
     }
     try{
-        researchUserByMatricule(req.body.user.matricule).then((user)=> {
+        researchUserByMatricule(req.body.matricule).then((user)=> {
             if(!user) {
                 return res.status(401).json({message:"Utilisateur non valide"})
             }
-            if(req.body.user.matricule !== user.matricule) {
+            if(req.body.matricule !== user.matricule) {
                 return res.status(401).json({message:"matricule/MdP non valides"})
             }
-        verifyPassword(req.body.user.password,user.password).then((passValid)=> {
+        verifyPassword(req.body.password,user.password).then((passValid)=> {
             if(!passValid) {
                 return res.status(402).json({message:"matricule/MdP non valides"}) 
             }else{
@@ -104,6 +82,5 @@ async function refreshToken(req,res){
 
 module.exports = {
     refreshToken,
-    createUser,
     loginUser
 }

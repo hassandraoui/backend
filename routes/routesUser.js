@@ -1,23 +1,40 @@
 const express = require("express")
 const router = express.Router()
+const bcrypt = require("bcryptjs")
+const User = require("../models/user")
+const {createUser,updateUser, deleteUser, getUser, getAllUser, addModuleToUser, removeModuleFromUser, ChangeEmploi} = require("../controllers/authorization/userController");
+
 
 router.get("/" ,(req, res) => {
-	res.send("Liste des utilisateurs")
+	getAllUser(req, res);
+})
+
+router.post( "/createUser", (req,res) => {
+	createUser(req,res);
+})
+
+router.post( "/ChangeEmploi/:id", (req,res) => {
+	ChangeEmploi(req,res);
+})
+router.patch("/addModuleToUser", (req, res)=>{
+	addModuleToUser(req, res);
+})
+
+router.patch("/removeModuleFromUser", (req, res)=>{
+	removeModuleFromUser(req, res);
 })
 
 router
 .route("/:id")
 .get( (req,res) => {
-	res.send(`Afficher les informations de l'utilisateur dont l'ID est ${req.params.id}`)
+	getUser(req,res);
 })
-.post( (req,res) => {
-	res.send(`Remplir les informations de l'utilisateur dont l'ID est ${req.params.id}`)
-})
+
 .patch( (req,res) => {
-	res.send(`Modifier les informations de l'utilisateur dont l'ID est ${req.params.id}`)
+	updateUser(req,res);
 })
 .delete( (req,res) => {
-	res.send(`Supprimer le utilisateur dont l'ID est ${req.params.id}`)
+	deleteUser(req,res);
 })
 
 module.exports = router
