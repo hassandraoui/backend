@@ -1,16 +1,26 @@
-const mongoose = require("mongoose")
-const Stagiaire = require("./models/stagiaire")
+const express = require("express")
+require("dotenv").config()
+const routesStagiaire = require("./routes/routesStagiaire")
+const routesUser = require("./routes/routesUser")
+const routesAuth = require("./routes/routesAuth")
+const {authByToken,authByRole} = require("./middlewares/authMiddlewares")
 
-mongoose.connect("mongodb://localhost/stagiaires_db", 
-	() => console.log("MONGODB connecté"),
+const mongoose = require("mongoose")
+mongoose.connect(`${process.env.MONGO_URI}/cpi_db`, 
+	() => console.log("MONGODB (global) connecté"),
 	(e) => console.log(e.message)
 )
 
-const stagiaire = new Stagiaire({
-	nom: "draoui",
-	prenom: "hassan",
-	dateNaissance: "1984-08-18",
-	email: "hassandraoui@gmail.com"
+const app = express()
+
+app.use(express.json())
+
+app.get("/", (req,res) => {
+res.send("Liste des groupes")
 })
 
-stagiaire.save().then( () => console.log("Stagiaire OK") )
+app.use("/auth", routesAuth)
+app.use("/stagiaires", routesStagiaire)
+app.use("/users", authByToken, authByRole('ADMIN'),routesUser)
+
+app.listen(3000,() => console.log('écoutant sur le port 3000'))
