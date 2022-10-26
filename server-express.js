@@ -11,11 +11,6 @@ const routesSalle = require("./routes/routesSalle")
 const routesEmploi = require("./routes/routesEmploi")
 const {authByToken,authByRole} = require("./middlewares/authMiddlewares")
 
-const routesStagiaire = require("./routes/routesStagiaire")
-const routesUser =  require("./routes/routesUser")
-const routesAuth = require("./routes/routesAuth")
-const {authByToken, authByRole} = require("./middlewares/authMiddlewares")
-
 
 const mongoose = require("mongoose")
 mongoose.connect(`${process.env.MONGO_URI}/cpi_db`, 
@@ -24,18 +19,10 @@ mongoose.connect(`${process.env.MONGO_URI}/cpi_db`,
 )
 
 const app = express()
-
 app.use(cors());
 app.use(express.json())
 
-app.get("/", (req,res) => { res.send("Liste des groupes") })
-
-
-app.use(express.json())
-
-app.get("/", (req,res) => {
-res.send("Liste des groupes de l'ISGI")
-})
+app.get("/", (req,res) => { res.send("Liste des groupes de l'ISGI") })
 
 
 app.use("/auth", routesAuth)
